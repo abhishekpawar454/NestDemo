@@ -97,8 +97,34 @@ export class AdminService {
     }
     const otp = Math.floor(1000 + Math.random() * 9000);
     admin.otp = otp;
+    admin.otpGeneratedAt = new Date();
     await this.adminRepository.save(admin);
     await this.emailService.forgotPasswordMail(data?.email, otp);
     return Index.sendResponse(Index.HttpStatus.OK, ResponseMessage.OTP_SENT);
+  }
+
+  async verifyOtp(data: {
+    email: string;
+    otp: number;
+  }): Promise<StandardResponse<Admin>> {
+    const admin = await this.adminRepository.findOne({
+      where: { email: data?.email },
+    });
+    if (!admin) {
+      throw new Index.NotFoundException(ResponseMessage.ADMIN_NOT_FOUND);
+    }
+    if (admin.otp !== data?.otp) {
+      throw new Index.BadRequestException(ResponseMessage.INVALID_OTP);
+    }
+    const otpExpiryMinutes = 1;
+    const now = new Date().getTime();
+    const createdAt = new Date(admin.otpGeneratedAt ?? 0).getTime();
+    if (now - createdAt > otpExpiryMinutes * 60 * 1000) {
+      throw new Index.BadRequestException(ResponseMessage.OTP_EXPIRED);
+    }
+    return Index.sendResponse(
+      Index.HttpStatus.OK,
+      ResponseMessage.OTP_VERIFIED,
+    );
   }
 }

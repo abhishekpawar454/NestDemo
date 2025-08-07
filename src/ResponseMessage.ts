@@ -6,6 +6,9 @@ const ResponseMessage = {
   ADMIN_UPDATED: 'Profile updated successfully',
   ADMIN_NOT_FOUND: 'Admin not found',
   OTP_SENT: 'Otp has been sent to your email',
+  OTP_VERIFIED: 'Otp verified successfully',
+  INVALID_OTP: 'Invalid otp',
+  OTP_EXPIRED: 'Otp expired',
 
   USER_NOT_FOUND: 'User not found',
   EMAIL_ALREADY_EXIST: 'Email already exist',

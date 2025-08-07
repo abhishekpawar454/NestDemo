@@ -48,4 +48,11 @@ export class AdminController {
   ): Promise<StandardResponse<Admin>> {
     return this.adminService.forgotPassword(body);
   }
+
+  @Index.Post('verify-otp')
+  async verifyOtp(
+    @Index.Body() body: { email: string; otp: number },
+  ): Promise<StandardResponse<Admin>> {
+    return this.adminService.verifyOtp(body);
+  }
 }

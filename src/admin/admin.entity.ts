@@ -24,6 +24,9 @@ export class Admin {
   @Index.IsOptional()
   otp: number;
 
+  @Index.Column({ nullable: true })
+  otpGeneratedAt: Date;
+
   @Index.CreateDateColumn()
   createdAt: Date;
 }
